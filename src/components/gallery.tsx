@@ -9,7 +9,7 @@ export default function Gallery({ images, onDeleted }: any) {
 
   return (
     <>
-      {/* GRID ESTILO APPLE */}
+      {/* GRID */}
       <motion.div
         layout
         className="

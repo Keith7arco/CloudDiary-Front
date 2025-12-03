@@ -40,7 +40,7 @@ export default function UploadPage() {
     <div className="max-w-xl mx-auto">
       <h2 className="text-3xl mb-6 font-semibold">Subir Archivo</h2>
 
-      <div className="bg-white p-6 rounded-xl shadow space-y-4">
+      <div className="bg-white p-6 dark:bg-black/20 rounded-xl shadow space-y-4">
         {/* Preview */}
         {preview && (
           <div className="rounded overflow-hidden shadow">
@@ -56,7 +56,7 @@ export default function UploadPage() {
           type="file"
           accept="image/*,video/*"
           onChange={onFileChange}
-          className="w-full border rounded-lg p-3 bg-gray-50"
+          className="w-full border rounded-lg p-3 bg-gray-50 dark:bg-gray-700"
         />
 
         <button

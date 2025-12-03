@@ -3,6 +3,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/api";
 import Gallery from "@/components/gallery";
+import { GalleryHorizontal, RefreshCw } from "lucide-react";
 
 async function fetchFiles() {
   const res = await api.get("/cloudinary/files");
@@ -21,22 +22,25 @@ export default function GalleryPage() {
   };
 
   return (
-    <div className="min-h-screen pb-10 bg-gray-50">
+    <div className="min-h-screen pb-10 bg-gray-50 dark:bg-black/20">
 
-      {/* NAVBAR ESTILO APPLE FOTOS */}
+      {/* NAVBAR */}
       <header className="
-        sticky top-0 z-50 
+        sticky top-0
         backdrop-blur-lg 
         bg-white/70 
+        dark:bg-black/20
         border-b 
         border-gray-200 
         shadow-sm
-      ">
+        dark:border-gray-700
+        ">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
 
           {/* TÍTULO */}
-          <h1 className="text-3xl font-semibold text-gray-900 tracking-tight">
-            Fotos
+          <h1 className="flex items-center gap-2 text-3xl font-semibold text-gray-900 dark:text-gray-100 ">
+            <GalleryHorizontal className="size-8"/>
+            Album
           </h1>
 
           {/* BOTÓN */}
@@ -45,15 +49,15 @@ export default function GalleryPage() {
             className="
               px-4 py-2 
               rounded-xl 
-              bg-white 
-              border border-gray-300 
-              shadow-sm 
-              hover:bg-gray-100 
-              active:scale-95 
+              text-gray-100
+              bg-blue-600
+              shadow-sm
+              hover:bg-blue-700
+              active:scale-95
               transition
             "
           >
-            Actualizar
+            <RefreshCw className='size-5'/>
           </button>
         </div>
       </header>
