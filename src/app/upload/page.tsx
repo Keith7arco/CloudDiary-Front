@@ -8,24 +8,36 @@ export default function UploadPage() {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState<number>(0);
   const router = useRouter();
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0] ?? null;
     setFile(f);
     setPreview(f ? URL.createObjectURL(f) : null);
+    setProgress(0);
   };
 
   const upload = async () => {
     if (!file) return alert("Selecciona un archivo");
 
     setUploading(true);
+    setProgress(0);
+
     try {
       const form = new FormData();
       form.append("file", file);
 
       await api.post("/cloudinary/upload", form, {
         headers: { "Content-Type": "multipart/form-data" },
+
+        // Barra de progreso
+        onUploadProgress: (e) => {
+          if (e.total) {
+            const percent = Math.round((e.loaded * 100) / e.total);
+            setProgress(percent);
+          }
+        },
       });
 
       router.push("/");
@@ -59,10 +71,26 @@ export default function UploadPage() {
           className="w-full border rounded-lg p-3 bg-gray-50 dark:bg-gray-700"
         />
 
+        {/*BARRA DE PROGRESO*/}
+        {uploading && (
+          <div className="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-4 overflow-hidden">
+            <div
+              className="bg-blue-600 h-4 transition-all duration-150"
+              style={{ width: `${progress}%` }}
+            ></div>
+          </div>
+        )}
+
+        {uploading && (
+          <p className="text-center text-sm font-medium">
+            Subiendo... {progress}%
+          </p>
+        )}
+
         <button
           onClick={upload}
           disabled={uploading}
-          className="w-full bg-blue-600 text-white py-3 rounded-lg shadow hover:bg-blue-700 transition"
+          className="w-full bg-blue-600 text-white py-3 rounded-lg shadow hover:bg-blue-700 transition disabled:bg-blue-400"
         >
           {uploading ? "Subiendo..." : "Subir"}
         </button>
