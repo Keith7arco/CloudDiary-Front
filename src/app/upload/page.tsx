@@ -28,7 +28,7 @@ export default function UploadPage() {
       if (file.type.startsWith("video")) {
       const videoData = await uploadVideoToCloudinary(file);
 
-      await api.post("/videos", {
+      await api.post("/cloudinary/videos", {
         url: videoData.secure_url,
         publicId: videoData.public_id,
         duration: videoData.duration,
