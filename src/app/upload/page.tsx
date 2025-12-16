@@ -66,7 +66,7 @@ export default function UploadPage() {
     formData.append("upload_preset", "video_unsigned");
 
     const res = await fetch(
-      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/video/upload`,
+      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/videos/upload`,
       {
         method: "POST",
         body: formData,
