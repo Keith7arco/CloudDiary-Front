@@ -25,13 +25,25 @@ export default function UploadPage() {
     setProgress(0);
 
     try {
+      if (file.type.startsWith("video")) {
+      const videoData = await uploadVideoToCloudinary(file);
+
+      await api.post("/videos", {
+        url: videoData.secure_url,
+        publicId: videoData.public_id,
+        duration: videoData.duration,
+      });
+
+      router.push("/");
+      return;
+    }
+
       const form = new FormData();
       form.append("file", file);
 
       await api.post("/cloudinary/upload", form, {
         headers: { "Content-Type": "multipart/form-data" },
 
-        // Barra de progreso
         onUploadProgress: (e) => {
           if (e.total) {
             const percent = Math.round((e.loaded * 100) / e.total);
@@ -47,6 +59,26 @@ export default function UploadPage() {
       setUploading(false);
     }
   };
+
+  async function uploadVideoToCloudinary(file: File) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "video_unsigned");
+
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/video/upload`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Error subiendo video");
+    }
+
+    return res.json();
+  }
 
   return (
     <div className="max-w-xl mx-auto">
